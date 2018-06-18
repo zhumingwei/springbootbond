@@ -1,6 +1,7 @@
 package com.zhumingwei.bond;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -14,6 +15,7 @@ import javax.sql.DataSource;
 @SpringBootApplication
 @EnableAutoConfiguration
 @RestController
+@MapperScan("com.zhumingwei.bond.dao")
 public class BondApplication {
 
     public static void main(String[] args) {
@@ -41,4 +43,6 @@ public class BondApplication {
         dataSource.setPoolPreparedStatements(false);//是否缓存preparedStatement，也就是PSCache
         return dataSource;
     }
+
+
 }

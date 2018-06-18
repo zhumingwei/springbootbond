@@ -3,6 +3,7 @@ package com.zhumingwei.bond.dao.base.config.resolve;
 import com.zhumingwei.bond.dao.base.config.EntityColumn;
 import com.zhumingwei.bond.dao.base.config.EntityTable;
 import com.zhumingwei.bond.dao.base.config.anotation.ID;
+import com.zhumingwei.bond.dao.base.config.anotation.NotColumn;
 import com.zhumingwei.bond.dao.base.config.anotation.Table;
 
 import java.lang.reflect.Field;
@@ -36,6 +37,9 @@ public class DefaultEntityResolve implements EntityResolve {
         List<Field> fields = new ArrayList<>();
         _fileds(entityClass, fields);
         for (Field field : fields) {
+            if (field.isAnnotationPresent(NotColumn.class)){
+                continue;
+            }
             EntityColumn fieldName = field2EntityColumn(field);
             entityClassColumns.add(fieldName);
             if (field.isAnnotationPresent(ID.class)) {

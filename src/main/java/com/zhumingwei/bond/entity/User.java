@@ -4,28 +4,47 @@ import com.zhumingwei.bond.dao.base.config.anotation.ID;
 import com.zhumingwei.bond.dao.base.config.anotation.Table;
 
 @Table(name = "user")
-public class User extends BaseEntity{
+public class User extends BaseEntity {
+
     @ID
-    private long id;
-    private String realname;
+    private int id;
+    private String nickname;
+    private String avatar;
     private int user_level;
     private int user_state;
     private int cid;//公司id
+    private int is_delete;
 
-    public long getId() {
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public int getIs_delete() {
+        return is_delete;
+    }
+
+    public void setIs_delete(int is_delete) {
+        this.is_delete = is_delete;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getRealname() {
-        return realname;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setRealname(String realname) {
-        this.realname = realname;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public int getUser_level() {
@@ -56,10 +75,12 @@ public class User extends BaseEntity{
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", realname='" + realname + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", avatar='" + avatar + '\'' +
                 ", user_level=" + user_level +
                 ", user_state=" + user_state +
                 ", cid=" + cid +
-                '}';
+                ", is_delete=" + is_delete +
+                "} " + super.toString();
     }
 }

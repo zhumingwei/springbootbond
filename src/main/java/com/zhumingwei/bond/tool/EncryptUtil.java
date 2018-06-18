@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.KeySpec;
 
-public class EncrypUtil {
+public class EncryptUtil {
 
     public static final String DEFAULTSALT = "zhudafu2018";
 

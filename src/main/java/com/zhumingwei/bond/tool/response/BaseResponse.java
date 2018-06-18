@@ -1,4 +1,4 @@
-package com.zhumingwei.bond.tool;
+package com.zhumingwei.bond.tool.response;
 
 /**
  * @author zhumingwei
@@ -8,6 +8,15 @@ public class BaseResponse<T> {
     private int code;
     private String message;
     private T item;
+
+    public BaseResponse(){
+
+    }
+    public BaseResponse(int code, String message, T item) {
+        this.code = code;
+        this.message = message;
+        this.item = item;
+    }
 
     public int getCode() {
         return code;
