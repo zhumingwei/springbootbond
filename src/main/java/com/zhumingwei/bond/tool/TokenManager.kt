@@ -1,8 +1,9 @@
 package com.zhumingwei.bond.tool
 
 import com.zhumingwei.bond.entity.Account
+import com.zhumingwei.bond.tool.EncryptUtil.getDecodeStr
+import com.zhumingwei.bond.tool.EncryptUtil.getEncryptStr
 import com.zhumingwei.bond.tool.TokenManager.cacheIDtoExTime
-import com.zhumingwei.bond.tool.TokenManager.getEncryptStr
 import java.nio.charset.StandardCharsets
 import java.util.Base64
 import java.util.Date
@@ -27,23 +28,12 @@ object TokenManager {
     }
 
 
-    fun getEncryptStr(str: String): String {
-        //TODO 对称加密的方法做
-        val bytes = Base64.getEncoder().encode(str.toByteArray(StandardCharsets.UTF_8))
-        return String(bytes, StandardCharsets.UTF_8)
-    }
-
     fun getIDFromToken(encryptStr: String) = getDecodeStr(encryptStr).split(SPLIT_STR)[0].toIntOrNull()?.let { it } ?: 0
 
     fun getDecodeStrArray(encryptStr: String): Array<String> {
         return getDecodeStr(encryptStr).split(SPLIT_STR).dropLastWhile { it.isEmpty() }.toTypedArray()
     }
 
-    fun getDecodeStr(encryptStr: String): String {
-        //TODO 对称加密的方法做
-        val bytes = encryptStr.toByteArray(StandardCharsets.UTF_8)
-        return String(Base64.getDecoder().decode(bytes), StandardCharsets.UTF_8)
-    }
 
     fun put(uid: Int, tokendate: Pair<String, Date>) {
         cacheIDtoExTime[uid] = tokendate
@@ -70,7 +60,7 @@ object TokenManager {
     //自己验证Token
     fun refreshExTime(token: String?) {
         token?.let {
-            refreshExTime(getIDFromToken(token),token)
+            refreshExTime(getIDFromToken(token), token)
         }
 
     }

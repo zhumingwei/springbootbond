@@ -1,10 +1,8 @@
 package com.zhumingwei.bond.controller
 
 
-import com.zhumingwei.bond.LOGIN_URL
-import com.zhumingwei.bond.TOKEN_NAME
-import com.zhumingwei.bond.USER_INFO_URL
-import com.zhumingwei.bond.USER_UPDATE
+import com.zhumingwei.bond.*
+import com.zhumingwei.bond.entity.Account
 import com.zhumingwei.bond.entity.User
 import com.zhumingwei.bond.service.UserService
 import com.zhumingwei.bond.tool.*
@@ -60,6 +58,29 @@ class UserController : BaseController() {
         } ?: run {
             responseError(response, ResponseCode.LOGIN_ERROR)
         }
+    }
+
+    @RequestMapping(path = [REGISTER_URL],method = [(RequestMethod.POST)])
+    fun rigister(request: HttpServletRequest,response: HttpServletResponse){
+        //todo 检查验证码是否正确
+        var phonenum = request.getParameter("phonenum")
+        //todo 检查手机号码正确性
+        if (!StringUtil.checkPhoneNum(phonenum)){
+            responseError(response,ResponseCode.REQUEST_ERROR)
+        }
+        var password = request.getParameter("password")
+        var account:Account = Account().apply {
+            this.password = password
+            this.phonenumber = phonenum
+            this.createby = 0
+            this.userdetail = User().apply {
+                nickname = "手机用户"+phonenumber.substring(7)
+                cid = 0
+                is_delete = 0
+            }
+        }
+        userService.register(account)
+        responseSuccess(response,"注册成功");
     }
 
     //修改密码根据手机号验证码修改

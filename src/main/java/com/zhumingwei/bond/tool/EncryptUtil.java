@@ -1,13 +1,13 @@
 package com.zhumingwei.bond.tool;
 
-import com.sun.org.apache.xml.internal.security.utils.Base64;
 
-import javax.crypto.*;
-import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
-import java.security.*;
-import java.security.spec.KeySpec;
+import java.security.InvalidKeyException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 public class EncryptUtil {
 
@@ -72,6 +72,8 @@ public class EncryptUtil {
         return sEncodedString;
     }
 
+
+    //kotlin巨坑byte，short不支持位运算
     private static void byte2string(byte[] bytes, StringBuffer hash) {
         for (int i = 0; i < bytes.length; i++) {
             String hex = Integer.toHexString(0xFF & bytes[i]);
@@ -81,5 +83,19 @@ public class EncryptUtil {
             hash.append(hex);
         }
     }
+
+
+    public static String getEncryptStr(String str) {
+        //TODO 对称加密的方法做
+        byte[] bytes = Base64.getEncoder().encode(str.getBytes(StandardCharsets.UTF_8));
+        return new String(bytes, StandardCharsets.UTF_8);
+    }
+
+    public static String getDecodeStr(String encryptStr){
+        //TODO 对称加密的方法做
+        byte[] bytes = encryptStr.getBytes(StandardCharsets.UTF_8);
+        return new String(Base64.getDecoder().decode(bytes), StandardCharsets.UTF_8);
+    }
+
 
 }

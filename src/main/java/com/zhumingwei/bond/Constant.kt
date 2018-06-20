@@ -7,6 +7,7 @@ package com.zhumingwei.bond
 const val LOGIN_URL = "/user/login"
 const val USER_INFO_URL = "/user/info"
 const val USER_UPDATE = "/user/update"
+const val REGISTER_URL = "/user/register"
 
 const val TOKEN_NAME = "IVANKA"
 class Constant{

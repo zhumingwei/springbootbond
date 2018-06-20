@@ -29,7 +29,7 @@ CREATE TABLE user(
   `user_state` smallint NOT NUll DEFAULT 0 COMMENT '用户状态',
   `cid` bigint(20) not null COMMENT '公司id',
   `is_delete` tinyint NOT NULL DEFAULT 0  COMMENT '是否被删除',
-  `avatar` varchar(100) NOT NULL COMMENT '头像',
+  `avatar` varchar(100) COMMENT '头像',
   `createby` bigint(20) NOT NULL DEFAULT -1 COMMENT '用户表id',
   `createdate` datetime NOT NULL DEFAULT NOW() COMMENT '创建时间',
   `updateby` bigint(20) NOT NULL DEFAULT -1 COMMENT '用户id',

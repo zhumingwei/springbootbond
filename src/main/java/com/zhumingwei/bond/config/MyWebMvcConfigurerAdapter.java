@@ -7,6 +7,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import static com.zhumingwei.bond.ConstantKt.LOGIN_URL;
+import static com.zhumingwei.bond.ConstantKt.REGISTER_URL;
 
 /**
  * @author zhumingwei
@@ -16,7 +17,7 @@ import static com.zhumingwei.bond.ConstantKt.LOGIN_URL;
 public class MyWebMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new TokenInterceptor()).addPathPatterns("/**").excludePathPatterns(LOGIN_URL);
+        registry.addInterceptor(new TokenInterceptor()).addPathPatterns("/**").excludePathPatterns(LOGIN_URL).excludePathPatterns(REGISTER_URL);
         super.addInterceptors(registry);
     }
 }

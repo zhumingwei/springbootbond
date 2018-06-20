@@ -46,9 +46,9 @@ public class UserServiceImplTest {
 
     @Test
     public void updatePassword() {
-        Account account = userService.loginByPwd("17621791737","zhumingwei");
-        account.setPassword("1234556");
-        userService.updatePassword(account);
+//        Account account = userService.loginByPwd("17621791737","zhumingwei");
+//        account.setPassword("1234556");
+//        userService.updatePassword(account);
     }
 
     @Test

@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
         //注册必须有手机号
         //by不能为null
         if (!checkRegisterData(account)) {
-            throw new RuntimeException("注册参数不对");
+            return 0;
         }
         Date now = account.now();
         account.getUserdetail().setCreatedate(now);
@@ -103,9 +103,12 @@ public class UserServiceImpl implements UserService {
     public int updatePassword(Account account) {
         //参数必须有id和password
         if (account.getId() == 0 || StringUtil.isEmpty(account.getPassword())) {
-            throw new RuntimeException("参数错误");
+            return 0;
         }
         Account a = accountDao.queryById(account);
+        if (a==null){
+            return 0;
+        }
         a.setPassword(EncryptUtil.getSaltMD5(account.getPassword()));
         return accountDao.update(a);
     }

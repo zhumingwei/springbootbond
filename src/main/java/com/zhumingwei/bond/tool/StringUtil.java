@@ -12,4 +12,9 @@ public class StringUtil {
             return str.isEmpty();
         }
     }
+
+    public static boolean checkPhoneNum(String phone){
+        //todo
+        return true;
+    }
 }

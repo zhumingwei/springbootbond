@@ -45,6 +45,8 @@ public class UserDaoTest {
         user.setNickname("朱大福123");
         user.setUser_level(9);
         user.setUser_state(1);
+        user.setUpdatedate(user.now());
+        user.setUpdateby(101);
         userDao.update(user);
     }
 
