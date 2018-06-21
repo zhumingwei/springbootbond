@@ -40,9 +40,7 @@ object ServletUtil {
         try {
             response.characterEncoding = RESPONSE_CHARACTERENCODING
             response.contentType = RESPONSE_CONTENTTYPE
-
             response.status = 200
-
             printWriter = response.writer
             jsonString = JSON.toJSONString(content, SerializerFeature.WriteMapNullValue)
             printWriter!!.write(jsonString)
@@ -52,27 +50,7 @@ object ServletUtil {
         } finally {
             printWriter?.close()
         }
-
-
         return jsonString
-    }
-
-    fun responseError(response: HttpServletResponse?, code: ResponseCode) {
-        response?.let {
-            ServletUtil.createResponse(BaseResponse<Any>().apply {
-                code.setCodeMessage(this);
-            }, it)
-
-        }
-    }
-
-    fun responseSuccess(response: HttpServletResponse?,item:Any){
-        response?.let {
-            ServletUtil.createResponse(BaseResponse<Any>().apply {
-            ResponseCode.SUCCESS.setCodeMessage(this);
-            this.item = item
-        }, it)
-        }
     }
 
 

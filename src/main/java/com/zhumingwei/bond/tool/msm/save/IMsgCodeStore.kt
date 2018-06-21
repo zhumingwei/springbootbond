@@ -10,25 +10,25 @@ import java.util.*
 
 interface IMsgCodeStore {
 
-    fun put(uid: Int, codedate: Pair<String, Date>)
+    fun put(phone: String, codedate: Pair<String, Date>)
 
-    fun get(uid: Int): Pair<String, Date>?
-    fun delete(uid: Int)
+    fun get(phone: String): Pair<String, Date>?
+    fun delete(phone: String)
 
 }
 
 class MemoryCodeStore : IMsgCodeStore {
-    override fun delete(uid: Int) {
-        cacheIDtoCodedate.remove(uid)
+    override fun put(phone: String, codedate: Pair<String, Date>) {
+        cacheIDtoCodedate.put(phone,codedate)
     }
 
-    val cacheIDtoCodedate = HashMap<Int, Pair<String, Date>>()
-    override fun get(uid: Int): Pair<String, Date>? {
-        return cacheIDtoCodedate.get(uid)
+    override fun delete(phone: String) {
+        cacheIDtoCodedate.remove(phone)
     }
 
-    override fun put(uid: Int, codedate: Pair<String, Date>) {
-        cacheIDtoCodedate.put(uid,codedate)
+    val cacheIDtoCodedate = HashMap<String, Pair<String, Date>>()
+    override fun get(phone: String): Pair<String, Date>? {
+        return cacheIDtoCodedate.get(phone)
     }
 
 }

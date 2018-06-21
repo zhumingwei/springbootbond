@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
         if (StringUtil.isEmpty(account.getPhonenumber())) {
             //没有手机号
             return false;
-        } else if (account.getCreateby() == 0 || account.getUpdateby() == 0 || account.getUserdetail() == null || account.getUserdetail().getUpdateby() == 0 || account.getUserdetail().getCreateby() == 0) {
+        } else if ( account.getUserdetail() == null ) {
             //各种参数不正确
             return false;
         } else {
@@ -101,14 +101,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int updatePassword(Account account) {
-        //参数必须有id和password
-        if (account.getId() == 0 || StringUtil.isEmpty(account.getPassword())) {
+        //参数必须有id和password和updateby
+        if (account.getId() == 0 || StringUtil.isEmpty(account.getPassword()) || account.getUpdateby() != 0) {
             return 0;
         }
         Account a = accountDao.queryById(account);
         if (a==null){
             return 0;
         }
+        a.setUpdateby(account.getUpdateby());
         a.setPassword(EncryptUtil.getSaltMD5(account.getPassword()));
         return accountDao.update(a);
     }
@@ -125,6 +126,21 @@ public class UserServiceImpl implements UserService {
         }
         return account;
     }
+
+    @Transactional
+    @Override
+    public Account loginByPnum(String pnum) {
+        Account account = accountDao.getAccountByPnum(pnum);
+        if (account!=null) {
+            User user = new User();
+            user.setId(account.getUid());
+            user = userDao.queryById(user);
+            account.setUserdetail(user);
+        }
+        return account;
+    }
+
+
 
     @Transactional
     @Override

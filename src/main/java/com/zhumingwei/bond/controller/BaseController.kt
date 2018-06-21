@@ -5,6 +5,7 @@ import com.zhumingwei.bond.tool.ServletUtil
 import com.zhumingwei.bond.tool.TokenManager
 import com.zhumingwei.bond.tool.response.BaseResponse
 import java.util.*
+import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 /**
@@ -13,8 +14,36 @@ import javax.servlet.http.HttpServletResponse
  */
 open class BaseController {
 
+    fun responseError(response: HttpServletResponse?, code: ResponseCode) {
+        response?.let {
+            ServletUtil.createResponse(BaseResponse<Any>().apply {
+                code.setCodeMessage(this);
+            }, it)
 
+        }
+    }
 
+    fun responseSuccess(response: HttpServletResponse?, item: Any) {
+        response?.let {
+            ServletUtil.createResponse(BaseResponse<Any>().apply {
+                ResponseCode.SUCCESS.setCodeMessage(this);
+                this.item = item
+            }, it)
+        }
+    }
+
+    fun responseMessage(response: HttpServletResponse?, o: BaseResponse<*>) {
+        response?.let { ServletUtil.createResponse(o, it) }
+    }
+
+    fun HttpServletRequest.getNotNullParameter(param:String):String{
+        var s = getParameter(param)
+        if (null == s){
+            s = ""
+        }
+        return s
+
+    }
 
 
 }

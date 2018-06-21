@@ -7,9 +7,14 @@ import com.zhumingwei.bond.tool.response.BaseResponse;
  * @date 2018/6/17 下午12:09
  */
 public enum  ResponseCode {
+
     REQUEST_ERROR("请求参数问题错误",50001),
     LOGIN_ERROR("用户名或密码错误",50002),
     TOKEN_ERROR("TOKEN 失效",50003),
+    PHONE_ERROR("错误的手机号",50004),
+    SEND_MESSAGE_ERROR("验证啊发送失败",50005),
+    MESSAGE_VALIDATE_ERROR("验证码错误",50006),
+    REGISTER_ERROR("注册失败",50006),
     SUCCESS("success",20000);
 
     private ResponseCode(String name, int index) {

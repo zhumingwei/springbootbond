@@ -28,10 +28,6 @@ object TokenManager {
 
     fun getIDFromToken(encryptStr: String) = getDecodeStr(encryptStr).split(SPLIT_STR)[0].toIntOrNull()?.let { it } ?: 0
 
-    fun getDecodeStrArray(encryptStr: String): Array<String> {
-        return getDecodeStr(encryptStr).split(SPLIT_STR).dropLastWhile { it.isEmpty() }.toTypedArray()
-    }
-
 
     fun put(uid: Int, tokendate: Pair<String, Date>) {
         tokenStore.put(uid,tokendate)

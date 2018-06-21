@@ -10,7 +10,11 @@ import org.junit.Assert.*
  */
 class MessageManagerTest {
 
-    @Test
-    fun sendSmsResponse() {
-    }
+//    @Test
+//    fun sendSmsResponse() {
+//
+//        MessageManager.sendRegisterCode(123123, "13061753717")
+//        Thread.sleep(10000)
+//        System.out.print(MessageManager.getRegisterCode(123123))
+//    }
 }
