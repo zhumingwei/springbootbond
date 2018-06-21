@@ -25,6 +25,7 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven {url 'http://maven.aliyun.com/nexus/content/groups/public/'}
 }
 
 
@@ -49,4 +50,6 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}"
     compile('com.fasterxml.jackson.module:jackson-module-kotlin')
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 }

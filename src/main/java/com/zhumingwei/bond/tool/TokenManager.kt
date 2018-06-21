@@ -3,11 +3,9 @@ package com.zhumingwei.bond.tool
 import com.zhumingwei.bond.entity.Account
 import com.zhumingwei.bond.tool.EncryptUtil.getDecodeStr
 import com.zhumingwei.bond.tool.EncryptUtil.getEncryptStr
-import com.zhumingwei.bond.tool.TokenManager.cacheIDtoExTime
-import java.nio.charset.StandardCharsets
-import java.util.Base64
-import java.util.Date
-import java.util.HashMap
+import com.zhumingwei.bond.tool.token.ITokenStore
+import com.zhumingwei.bond.tool.token.MemoryTokenStore
+import java.util.*
 
 /**
  * @author zhumingwei
@@ -18,7 +16,7 @@ object TokenManager {
     //过期时间
     val EX_TIME = (1000 * 60 * 10).toLong()
     //key 为用户id value Pair<token,Date>为过期时间。
-    val cacheIDtoExTime = HashMap<Int, Pair<String, Date>>()
+    var tokenStore: ITokenStore = MemoryTokenStore()
     private val SPLIT_STR = "~~~";
     //获取token
     fun generateToken(account: Account): String {
@@ -36,11 +34,12 @@ object TokenManager {
 
 
     fun put(uid: Int, tokendate: Pair<String, Date>) {
-        cacheIDtoExTime[uid] = tokendate
+        tokenStore.put(uid,tokendate)
     }
 
     operator fun get(uid: Int): Pair<String, Date>? {
-        return cacheIDtoExTime.get(uid)
+        //todo 如果过期删除token
+        return tokenStore.get(uid)
     }
 
     fun checkUserExTimeAndTokenRight(uid: Int, userToken: String?): Boolean {
@@ -62,7 +61,6 @@ object TokenManager {
         token?.let {
             refreshExTime(getIDFromToken(token), token)
         }
-
     }
 
 }
