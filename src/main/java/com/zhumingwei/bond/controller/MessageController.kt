@@ -47,13 +47,13 @@ class MessageController : BaseController(){
             responseMessage(response, BaseResponse<String>().apply {
                 code = ResponseCode.SEND_MESSAGE_ERROR.code
                 message = ResponseCode.SEND_MESSAGE_ERROR.message + " " + resp.message
-                item = null
+                data = null
             })
         }?:run {
             responseMessage(response, BaseResponse<String>().apply {
                 code = ResponseCode.SEND_MESSAGE_ERROR.code
                 message = ResponseCode.SEND_MESSAGE_ERROR.message
-                item = null
+                data = null
             })
         }
     }

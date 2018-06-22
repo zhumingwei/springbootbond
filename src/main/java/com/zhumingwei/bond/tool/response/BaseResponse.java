@@ -7,15 +7,15 @@ package com.zhumingwei.bond.tool.response;
 public class BaseResponse<T> {
     private int code;
     private String message;
-    private T item;
+    private T data;
 
     public BaseResponse(){
 
     }
-    public BaseResponse(int code, String message, T item) {
+    public BaseResponse(int code, String message, T data) {
         this.code = code;
         this.message = message;
-        this.item = item;
+        this.data = data;
     }
 
     public int getCode() {
@@ -34,11 +34,11 @@ public class BaseResponse<T> {
         this.message = message;
     }
 
-    public T getItem() {
-        return item;
+    public T getData() {
+        return data;
     }
 
-    public void setItem(T item) {
-        this.item = item;
+    public void setData(T data) {
+        this.data = data;
     }
 }

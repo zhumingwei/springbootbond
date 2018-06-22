@@ -6,7 +6,7 @@ package com.zhumingwei.bond.tool;
  */
 public class StringUtil {
     public static boolean isEmpty(String str) {
-        if (str == null) {
+        if (str == null || str.trim().equals("")) {
             return true;
         } else {
             return str.isEmpty();

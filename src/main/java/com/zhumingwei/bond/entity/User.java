@@ -3,6 +3,7 @@ package com.zhumingwei.bond.entity;
 import com.zhumingwei.bond.BondConstant;
 import com.zhumingwei.bond.dao.base.config.anotation.ID;
 import com.zhumingwei.bond.dao.base.config.anotation.Table;
+import com.zhumingwei.bond.tool.StringUtil;
 
 @Table(name = "user")
 public class User extends BaseEntity {
@@ -17,7 +18,7 @@ public class User extends BaseEntity {
     private int is_delete;
 
     public String getAvatar() {
-        if (avatar == null){
+        if (StringUtil.isEmpty(avatar)){
             avatar = BondConstant.Companion.getDEFAULT_AVATAR();
         }
         return avatar;

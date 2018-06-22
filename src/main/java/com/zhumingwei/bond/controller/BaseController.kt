@@ -23,11 +23,11 @@ open class BaseController {
         }
     }
 
-    fun responseSuccess(response: HttpServletResponse?, item: Any) {
+    fun responseSuccess(response: HttpServletResponse?, data: Any) {
         response?.let {
             ServletUtil.createResponse(BaseResponse<Any>().apply {
                 ResponseCode.SUCCESS.setCodeMessage(this);
-                this.item = item
+                this.data = data
             }, it)
         }
     }

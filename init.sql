@@ -42,4 +42,4 @@ insert into user (`nickname`,`user_level`,`user_state`,`cid`,`avatar`,`createby`
     values("朱明伟",999,0,0,"http://p9yjgmoug.bkt.clouddn.com/5000000025385-4KpbGt7bNRVkQcYvGRqV9VngvU_Z7rV_",0,0);
 
 insert into account(`password`,`phonenumber`,`uid`,`createby`,`updateby`)
-    values("c3f4ff05ddf213d984c351de9e091817","17621791737",101,101,101);
+    values("c3f4ff05ddf213d984c351de9e091817","17621791737",100000,101,101);

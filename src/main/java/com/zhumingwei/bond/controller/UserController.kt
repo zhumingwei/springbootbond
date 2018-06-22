@@ -33,7 +33,7 @@ class UserController : BaseController() {
     private lateinit var userService: UserService
 
     //6，获取用户信息
-    @RequestMapping(path = [USER_INFO_URL], method = [(RequestMethod.POST)])
+    @RequestMapping(path = [USER_INFO_URL], method = [RequestMethod.POST, RequestMethod.GET])
     fun info(request: HttpServletRequest, response: HttpServletResponse) {
         val token = request.getHeader(TOKEN_NAME)
         val uid = TokenManager.getIDFromToken(token)
@@ -123,6 +123,7 @@ class UserController : BaseController() {
     }
 
     //修改密码根据手机号验证码修改
+    @RequestMapping(path = [MODIFY_PASSWORD], method = [(RequestMethod.POST)])
     fun modifyPassword(request: HttpServletRequest, response: HttpServletResponse) {
         val phonenum = request.getNotNullParameter("phonenum")
         val code = request.getNotNullParameter("code")
@@ -136,11 +137,16 @@ class UserController : BaseController() {
             responseError(response, ResponseCode.MESSAGE_VALIDATE_ERROR)
         }
         MessageManager.deleteChangePwdCode(phonenum)
-        userService.updatePassword(Account().apply {
+        var i = userService.updatePassword(Account().apply {
             this.uid = uid
             this.password = password
             this.updateby = uid.toLong()
         })
+        if (i != 0) {
+            responseSuccess(response, "修改成功")
+        } else {
+            responseError(response, ResponseCode.MODIFY_ERROR)
+        }
 
 
     }
@@ -159,8 +165,8 @@ class UserController : BaseController() {
             du.nickname = user.nickname
         }
         du.updateby = uid.toLong()
-        val i = userService.updateUser(user)
-        if (i == 0) {
+        val i = userService.updateUser(du)
+        if (i != 0) {
             responseSuccess(response, "修改成功")
         } else {
             responseError(response, ResponseCode.MODIFY_ERROR)

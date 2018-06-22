@@ -1,12 +1,17 @@
 package com.zhumingwei.bond.tool;
 
 
-import javax.crypto.Mac;
+import sun.misc.BASE64Encoder;
+
+import javax.crypto.*;
+import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 
 public class EncryptUtil {
@@ -84,18 +89,85 @@ public class EncryptUtil {
         }
     }
 
+    //#############################################
+    static SecretKey secretKey;
+
+    public static SecretKey getSecretKey() {
+        if (secretKey == null) {
+            KeyGenerator keyGenerator = null;
+            try {
+                keyGenerator = KeyGenerator.getInstance(KEY_ALGORITHM);
+
+                //指定长度默认值,密钥长度必须的8的倍数
+                keyGenerator.init(56);
+                //生成一个密钥
+                SecretKey Key = keyGenerator.generateKey();
+                //得到加密私钥的byte数组
+                byte[] byteKey = Key.getEncoded();
+
+                //key转换
+                DESKeySpec desKeySpec = new DESKeySpec(byteKey);
+                SecretKeyFactory factory = SecretKeyFactory.getInstance(KEY_ALGORITHM);
+                secretKey = factory.generateSecret(desKeySpec);
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (InvalidKeySpecException e) {
+                e.printStackTrace();
+            } catch (InvalidKeyException e) {
+                e.printStackTrace();
+            }
+        }
+        return secretKey;
+    }
+
+    static Cipher cipher;
+
+    public static Cipher getCipher() {
+        if (cipher == null) {
+            try {
+                cipher = Cipher.getInstance(CIPHER_ALGORITHM);
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (NoSuchPaddingException e) {
+                e.printStackTrace();
+            }
+        }
+        return cipher;
+    }
 
     public static String getEncryptStr(String str) {
-        //TODO 对称加密的方法做
-        byte[] bytes = Base64.getEncoder().encode(str.getBytes(StandardCharsets.UTF_8));
-        return new String(bytes, StandardCharsets.UTF_8);
+        try {
+
+            //加密
+
+            getCipher().init(Cipher.ENCRYPT_MODE, getSecretKey());
+            byte[] result = getCipher().doFinal(str.getBytes(StandardCharsets.UTF_8));
+            return new String(Base64.getEncoder().encode(result), StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            return "";
+        }
     }
 
-    public static String getDecodeStr(String encryptStr){
-        //TODO 对称加密的方法做
-        byte[] bytes = encryptStr.getBytes(StandardCharsets.UTF_8);
-        return new String(Base64.getDecoder().decode(bytes), StandardCharsets.UTF_8);
+    public static String getDecodeStr(String encryptStr) {
+        try {
+
+            //解密
+            getCipher().init(Cipher.DECRYPT_MODE, getSecretKey());
+            byte[] result = getCipher().doFinal(Base64.getDecoder().decode(encryptStr.getBytes(StandardCharsets.UTF_8)));
+
+            return new String(result, StandardCharsets.UTF_8);
+        } catch (Exception ex) {
+            return "";
+        }
     }
+
+
+    //算法名称
+    private static final String KEY_ALGORITHM = "DES";
+    //算法名称/加密模式/填充方式
+    //DES共有四种工作模式，ECB：电子密码本模式、CBC：加密分组链接模式、CFB：加密反馈模式、OFB：输出反馈模式
+    private static final String CIPHER_ALGORITHM = "DES/ECB/PKCS5Padding";
+
 
 
 }
