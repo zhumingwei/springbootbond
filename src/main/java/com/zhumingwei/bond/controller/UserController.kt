@@ -48,6 +48,15 @@ class UserController : BaseController() {
             responseError(response, ResponseCode.TOKEN_ERROR)
         }
     }
+    @RequestMapping(path = [LOGOUT_URL],method = [RequestMethod.POST])
+    fun logout(request: HttpServletRequest, response: HttpServletResponse){
+        var id = request.getIdFromToken()
+        if (id != 0){
+            responseSuccess(response,"成功")
+        }else{
+            responseSuccess(response,"成功")
+        }
+    }
 
     //有password 用密码登录 没有用验证码登录
     @RequestMapping(path = [LOGIN_URL], method = [(RequestMethod.POST)])

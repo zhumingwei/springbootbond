@@ -15,10 +15,14 @@ import static com.zhumingwei.bond.ConstantKt.REGISTER_URL;
  */
 //todo WebMvcConfigurationSupport 修改   interceptor添加无效
 @Configuration
-public class MyWebMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
+public class MyWebMvcConfigurerAdapter extends WebMvcConfigurationSupport {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new TokenInterceptor()).addPathPatterns("/**").excludePathPatterns(LOGIN_URL).excludePathPatterns(REGISTER_URL).excludePathPatterns("/file/gettoken");
+        registry.addInterceptor(new TokenInterceptor())
+                .addPathPatterns("/**")
+                .excludePathPatterns(LOGIN_URL)
+                .excludePathPatterns(REGISTER_URL)
+                .excludePathPatterns("/file/gettoken");
         super.addInterceptors(registry);
     }
 }

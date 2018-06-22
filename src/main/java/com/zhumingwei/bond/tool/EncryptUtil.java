@@ -1,12 +1,9 @@
 package com.zhumingwei.bond.tool;
 
 
-import sun.misc.BASE64Encoder;
-
 import javax.crypto.*;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
