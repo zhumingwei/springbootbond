@@ -30,5 +30,5 @@
 
 
 buildproject.sh
-/src/main/java/application.properties
-/src/main/java/com/zhumingwei/bond/Constant.kt
+src/main/java/application.properties
+src/main/java/com/zhumingwei/bond/Constant.kt
