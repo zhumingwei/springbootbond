@@ -12,7 +12,12 @@ const val REGISTER_URL = "/user/register"
 
 const val TOKEN_NAME = "IVANKA"
 
-object BondConstant{
-    var DEFAULT_AVATAR: String = ""
+class BondConstant {
+    companion object  {
+        var DEFAULT_AVATAR: String = "默认图片"
+        var NIU7_ACCESSKEY = "uB-9nDVe9nZ6b-yl2EbEZf-WZHWICYwl_Se_whE5"
+        var NIU7_SECRETKEY = "N7klHPuBzJhI-EGaGbZs1KFtbMai7o3vKRgh2l--"
+        val MEG_ACCESSKEYID = "LTAISJkwKHeaRnnw"
+        val MEG_ACCESSKEYSECRET = "SS4oWFYnkKlfmBdAfLCdHnH1mHp6V3"
+    }
 }
-

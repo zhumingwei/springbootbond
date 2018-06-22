@@ -4,7 +4,6 @@ import com.zhumingwei.bond.BondConstant;
 import com.zhumingwei.bond.dao.base.config.anotation.ID;
 import com.zhumingwei.bond.dao.base.config.anotation.Table;
 
-
 @Table(name = "user")
 public class User extends BaseEntity {
 
@@ -19,7 +18,7 @@ public class User extends BaseEntity {
 
     public String getAvatar() {
         if (avatar == null){
-            avatar = BondConstant.INSTANCE.getDEFAULT_AVATAR();
+            avatar = BondConstant.Companion.getDEFAULT_AVATAR();
         }
         return avatar;
     }

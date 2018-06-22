@@ -15,9 +15,15 @@ fun String.isMsgCode(): Boolean {
     return this.matches(Regex("^\\d{6}$"))
 }
 
-fun HttpServletRequest.getIdFromToken():Int{
-    var token:String = getHeader(TOKEN_NAME)
-    return token?.let {
-        TokenManager.getIDFromToken(it)
-    }
+fun HttpServletRequest.getIdFromToken(): Int {
+    var token: String = getNotNullHeader(TOKEN_NAME)
+    return TokenManager.getIDFromToken(token)
+}
+
+fun HttpServletRequest.getNotNullParameter(param: String): String {
+    return getParameter(param)?:""
+}
+
+fun HttpServletRequest.getNotNullHeader(param: String): String {
+    return getHeader(param) ?: ""
 }

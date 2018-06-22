@@ -36,14 +36,6 @@ open class BaseController {
         response?.let { ServletUtil.createResponse(o, it) }
     }
 
-    fun HttpServletRequest.getNotNullParameter(param:String):String{
-        var s = getParameter(param)
-        if (null == s){
-            s = ""
-        }
-        return s
-
-    }
 
 
 }

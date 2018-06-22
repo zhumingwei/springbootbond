@@ -1,12 +1,9 @@
 package com.zhumingwei.bond.interception
 
 import com.zhumingwei.bond.TOKEN_NAME
-import com.zhumingwei.bond.tool.ResponseCode
-import com.zhumingwei.bond.tool.ServletUtil
-import com.zhumingwei.bond.tool.TokenManager
+import com.zhumingwei.bond.tool.*
 import com.zhumingwei.bond.tool.TokenManager.checkUserExTimeAndTokenRight
 import com.zhumingwei.bond.tool.TokenManager.refreshExTime
-import com.zhumingwei.bond.tool.getIdFromToken
 import com.zhumingwei.bond.tool.response.BaseResponse
 import org.springframework.web.servlet.HandlerInterceptor
 import org.springframework.web.servlet.ModelAndView
@@ -22,7 +19,7 @@ class TokenInterceptor : HandlerInterceptor {
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse?, handler: Any?): Boolean {
         var result = false
 
-        val token = request.getHeader(TOKEN_NAME)
+        val token = request.getNotNullHeader(TOKEN_NAME)
         var uid = request.getIdFromToken()
         if (!token.isEmpty()){
             result = checkUserExTimeAndTokenRight(uid, token)

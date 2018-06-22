@@ -57,7 +57,7 @@ class UserController : BaseController() {
         val password = request.getNotNullParameter("password")
 
         var account: Account? = null
-        
+
         if (!phonenum.isPhoneNum()) {
             responseError(response, ResponseCode.REQUEST_ERROR)
         }
@@ -149,9 +149,11 @@ class UserController : BaseController() {
     fun updateUser(request: HttpServletRequest, response: HttpServletResponse, @RequestBody user: User) {
         val uid = request.getIdFromToken()
         val du = userService.queryById(uid)
-        if (!user.avatar.isEmpty()) {
+        var oldavatar: String? = null
+        if (!user.avatar.isEmpty() && user.avatar != du.avatar) {
+            oldavatar = du.avatar
             du.avatar = user.avatar
-            //todo 删除没用图片
+
         }
         if (!user.nickname.isEmpty()) {
             du.nickname = user.nickname
@@ -159,9 +161,13 @@ class UserController : BaseController() {
         du.updateby = uid.toLong()
         val i = userService.updateUser(user)
         if (i == 0) {
-
+            responseSuccess(response, "修改成功")
+        } else {
+            responseError(response, ResponseCode.MODIFY_ERROR)
         }
-        LogUtil.loge(user)
+        oldavatar?.let {
+            FileController.delete(oldavatar)
+        }
     }
 
 }
