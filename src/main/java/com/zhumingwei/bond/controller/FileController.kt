@@ -9,6 +9,7 @@ import com.zhumingwei.bond.BondConstant
 import com.zhumingwei.bond.tool.EncryptUtil
 import com.zhumingwei.bond.tool.response.BaseResponse
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
 import java.util.HashMap
@@ -25,17 +26,9 @@ class FileController : BaseController() {
 
 
     //不能用同样的名字，7牛替换图片没有那么实时
-    val token: Map<String, String>
-        get() {
-            val filename = "serverfile" + System.currentTimeMillis()
-            val map = HashMap<String, String>()
-            map["token"] = auth.uploadToken(bucket, filename)
-            map["filename"] = filename
-            map["url"] = "http://p9yjgmoug.bkt.clouddn.com/$filename"
-            return map
-        }
 
-    @RequestMapping("/gettoken")
+
+    @RequestMapping("/gettoken",method = [RequestMethod.GET])
     fun getToken(request: HttpServletRequest, response: HttpServletResponse) {
         val filename = EncryptUtil.getMD5("serverfile" + System.currentTimeMillis())
         val map = HashMap<String, String>()

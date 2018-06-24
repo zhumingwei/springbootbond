@@ -30,5 +30,6 @@
 
 
 buildproject.sh
+apidoc.md
 src/main/resources/application.properties
 src/main/java/com/zhumingwei/bond/Constant.kt

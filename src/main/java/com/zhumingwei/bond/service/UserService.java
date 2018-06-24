@@ -17,8 +17,8 @@ public interface UserService {
     //注册
     int register(Account account);
     //登录获取简单基本数据
-    Account loginByPwd(String pnum,String pwd);
-    Account loginByPnum(String pnum);
+    Account getAccountByPnumPwd(String pnum, String pwd);
+    Account getAccountBypnum(String pnum);
     //查询账户信息（）
     Account getAccount(int id);
     //注销账户（解绑uid）

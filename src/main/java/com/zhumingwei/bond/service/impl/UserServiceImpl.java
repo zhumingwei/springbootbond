@@ -116,7 +116,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public Account loginByPwd(String pnum, String pwd) {
+    public Account getAccountByPnumPwd(String pnum, String pwd) {
         Account account = accountDao.getAccountByPnumPwd(pnum, EncryptUtil.getSaltMD5(pwd));
         if (account!=null) {
             User user = new User();
@@ -129,7 +129,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public Account loginByPnum(String pnum) {
+    public Account getAccountBypnum(String pnum) {
         Account account = accountDao.getAccountByPnum(pnum);
         if (account!=null) {
             User user = new User();

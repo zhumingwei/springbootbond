@@ -32,22 +32,7 @@ class UserController : BaseController() {
     @Autowired
     private lateinit var userService: UserService
 
-    //6，获取用户信息
-    @RequestMapping(path = [USER_INFO_URL], method = [RequestMethod.POST, RequestMethod.GET])
-    fun info(request: HttpServletRequest, response: HttpServletResponse) {
-        val token = request.getHeader(TOKEN_NAME)
-        val uid = TokenManager.getIDFromToken(token)
-        if (checkUserExTimeAndTokenRight(uid, token)) {
-            val user = userService.queryById(uid)
-            user?.let {
-                responseSuccess(response, user)
-            } ?: run {
-                responseError(response, ResponseCode.REQUEST_ERROR)
-            }
-        } else {
-            responseError(response, ResponseCode.TOKEN_ERROR)
-        }
-    }
+
     @RequestMapping(path = [LOGOUT_URL],method = [RequestMethod.POST])
     fun logout(request: HttpServletRequest, response: HttpServletResponse){
         var id = request.getIdFromToken()
@@ -59,7 +44,7 @@ class UserController : BaseController() {
     }
 
     //有password 用密码登录 没有用验证码登录
-    @RequestMapping(path = [LOGIN_URL], method = [(RequestMethod.POST)])
+    @RequestMapping(path = [LOGIN_URL], method = [RequestMethod.POST])
     fun login(request: HttpServletRequest, response: HttpServletResponse) {
         val phonenum = request.getNotNullParameter("phonenum");
         val code = request.getNotNullParameter("code")
@@ -72,13 +57,13 @@ class UserController : BaseController() {
         }
 
         if (!password.isEmpty()) {
-            account = userService.loginByPwd(phonenum, password)
+            account = userService.getAccountByPnumPwd(phonenum, password)
         } else {
             if (!code.isMsgCode() || !MessageManager.getLoginCode(phonenum).equals(code)) {
                 responseError(response, ResponseCode.MESSAGE_VALIDATE_ERROR)
             }
             MessageManager.deleteLoginCode(phonenum)
-            account = userService.loginByPnum(phonenum)
+            account = userService.getAccountBypnum(phonenum)
         }
 
         account?.let {
@@ -131,33 +116,20 @@ class UserController : BaseController() {
         }
     }
 
-    //修改密码根据手机号验证码修改
-    @RequestMapping(path = [MODIFY_PASSWORD], method = [(RequestMethod.POST)])
-    fun modifyPassword(request: HttpServletRequest, response: HttpServletResponse) {
-        val phonenum = request.getNotNullParameter("phonenum")
-        val code = request.getNotNullParameter("code")
-        val password = request.getNotNullParameter("password")
-        val uid = request.getIdFromToken()
-        if (!phonenum.isPhoneNum() || !code.isMsgCode() || password.isEmpty()) {
-            responseError(response, ResponseCode.REQUEST_ERROR)
-        }
-
-        if (MessageManager.getChangePwdCode(phonenum) != code) {
-            responseError(response, ResponseCode.MESSAGE_VALIDATE_ERROR)
-        }
-        MessageManager.deleteChangePwdCode(phonenum)
-        var i = userService.updatePassword(Account().apply {
-            this.uid = uid
-            this.password = password
-            this.updateby = uid.toLong()
-        })
-        if (i != 0) {
-            responseSuccess(response, "修改成功")
+    @RequestMapping(path = [USER_INFO_URL], method = [RequestMethod.POST, RequestMethod.GET])
+    fun info(request: HttpServletRequest, response: HttpServletResponse) {
+        val token = request.getHeader(TOKEN_NAME)
+        val uid = TokenManager.getIDFromToken(token)
+        if (checkUserExTimeAndTokenRight(uid, token)) {
+            val user = userService.queryById(uid)
+            user?.let {
+                responseSuccess(response, user)
+            } ?: run {
+                responseError(response, ResponseCode.REQUEST_ERROR)
+            }
         } else {
-            responseError(response, ResponseCode.MODIFY_ERROR)
+            responseError(response, ResponseCode.TOKEN_ERROR)
         }
-
-
     }
 
     @RequestMapping(path = [USER_UPDATE], method = [(RequestMethod.POST)])
@@ -182,6 +154,59 @@ class UserController : BaseController() {
         }
         oldavatar?.let {
             FileController.delete(oldavatar)
+        }
+    }
+
+
+    @RequestMapping(path = [MODIFY_PASSWORD], method = [(RequestMethod.POST)])
+    fun modifyPassword(request: HttpServletRequest, response: HttpServletResponse) {
+        val phonenum = request.getNotNullParameter("phonenum")
+        val code = request.getNotNullParameter("code")
+        val password = request.getNotNullParameter("password")
+        val uid = request.getIdFromToken()
+        if (!phonenum.isPhoneNum() || !code.isMsgCode() || password.isEmpty()) {
+            responseError(response, ResponseCode.REQUEST_ERROR)
+        }
+
+        if (MessageManager.getChangePwdCode(phonenum) != code) {
+            responseError(response, ResponseCode.MESSAGE_VALIDATE_ERROR)
+        }
+        MessageManager.deleteChangePwdCode(phonenum)
+        var i = userService.updatePassword(Account().apply {
+            this.uid = uid
+            this.password = password
+            this.updateby = uid.toLong()
+        })
+        if (i != 0) {
+            responseSuccess(response, "修改成功")
+        } else {
+            responseError(response, ResponseCode.MODIFY_ERROR)
+        }
+    }
+
+    @RequestMapping(path = [MODIFY_PASSWORD_BYPWD], method = [(RequestMethod.POST)])
+    fun modifyPasswordByPwd(request: HttpServletRequest, response: HttpServletResponse) {
+        val phonenum = request.getNotNullParameter("phonenum")
+        val code = request.getNotNullParameter("oldpwd")
+        val password = request.getNotNullParameter("pwd")
+        val uid = request.getIdFromToken()
+        if (!phonenum.isPhoneNum() || code.isEmpty() || password.isEmpty()) {
+            responseError(response, ResponseCode.REQUEST_ERROR)
+        }
+        var account:Account? = userService.getAccountByPnumPwd(phonenum,password);
+        var i = 0
+        account?.let {
+            i = userService.updatePassword(Account().apply {
+                this.uid = uid
+                this.password = password
+                this.updateby = uid.toLong()
+            })
+        }
+
+        if (i != 0) {
+            responseSuccess(response, "修改成功")
+        } else {
+            responseError(response, ResponseCode.MODIFY_ERROR)
         }
     }
 

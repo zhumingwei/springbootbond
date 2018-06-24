@@ -2,6 +2,7 @@ package com.zhumingwei.bond.config;
 
 import com.zhumingwei.bond.interception.TokenInterceptor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.PathMatcher;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;

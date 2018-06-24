@@ -40,20 +40,20 @@ public class UserServiceImplTest {
 
     @Test
     public void login() {
-        Account account = userService.loginByPwd("17621791737","1234556");
+        Account account = userService.getAccountByPnumPwd("17621791737","1234556");
         LogUtil.loge(account);
     }
 
     @Test
     public void updatePassword() {
-//        Account account = userService.loginByPwd("17621791737","zhumingwei");
+//        Account account = userService.getAccountByPnumPwd("17621791737","zhumingwei");
 //        account.setPassword("1234556");
 //        userService.updatePassword(account);
     }
 
     @Test
     public void updateUser(){
-        Account account = userService.loginByPwd("17621791737","1234556");
+        Account account = userService.getAccountByPnumPwd("17621791737","1234556");
         User user = account.getUserdetail();
         user.setNickname("ye ggg");
         userService.updateUser(user);
