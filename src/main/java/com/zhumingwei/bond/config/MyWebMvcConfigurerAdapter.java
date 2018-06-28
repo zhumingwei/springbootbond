@@ -23,7 +23,9 @@ public class MyWebMvcConfigurerAdapter extends WebMvcConfigurationSupport {
                 .addPathPatterns("/**")
                 .excludePathPatterns(LOGIN_URL)
                 .excludePathPatterns(REGISTER_URL)
-                .excludePathPatterns("/file/gettoken");
+                .excludePathPatterns("/file/gettoken")
+                .excludePathPatterns("/msg/**");
+
         super.addInterceptors(registry);
     }
 }
