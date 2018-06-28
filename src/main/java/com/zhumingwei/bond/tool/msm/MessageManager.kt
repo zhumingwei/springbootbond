@@ -86,7 +86,7 @@ object MessageManager {
     fun sendLoginCode(phone: String, code: String = generateCode()): SendSmsResponse {
         val response = sendSmsResponse("SMS_137505069", mapOf("code" to code), phone)
         if ("ok" == response.code.toLowerCase()) {
-            changePwdStore.put(phone, code to Date(System.currentTimeMillis() + EX_TIME))
+            loginCodeStore.put(phone, code to Date(System.currentTimeMillis() + EX_TIME))
         }
         return response
     }

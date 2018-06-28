@@ -25,10 +25,9 @@ import javax.servlet.http.HttpServletResponse
 class MessageController : BaseController(){
     @RequestMapping("/sendmsg/{type}" , method = [RequestMethod.POST])
     fun sendMsg(@PathVariable type:String,request:HttpServletRequest,response:HttpServletResponse,@Param("phonenum") phonenum:String){
-        if (checkPhoneNum(phonenum)){
+        if (!checkPhoneNum(phonenum)){
             responseError(response,ResponseCode.PHONE_ERROR)
         }
-        var uid = TokenManager.getIDFromToken(request.getHeader(TOKEN_NAME))
         var resp: SendSmsResponse? = when(type){
             "register"->{
                 MessageManager.sendRegisterCode(phonenum)
@@ -45,9 +44,15 @@ class MessageController : BaseController(){
         }
         resp?.let {
             responseMessage(response, BaseResponse<String>().apply {
-                code = ResponseCode.SEND_MESSAGE_ERROR.code
-                message = ResponseCode.SEND_MESSAGE_ERROR.message + " " + resp.message
-                data = null
+                if (it.code.toLowerCase() == "ok"){
+                    code = ResponseCode.SUCCESS.code
+                    message = ResponseCode.SUCCESS.message + " " + resp.message
+                    data = null
+                }else {
+                    code = ResponseCode.SEND_MESSAGE_ERROR.code
+                    message = ResponseCode.SEND_MESSAGE_ERROR.message + " " + resp.message
+                    data = null
+                }
             })
         }?:run {
             responseMessage(response, BaseResponse<String>().apply {
