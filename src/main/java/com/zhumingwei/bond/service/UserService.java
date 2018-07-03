@@ -19,6 +19,7 @@ public interface UserService {
     //登录获取简单基本数据
     Account getAccountByPnumPwd(String pnum, String pwd);
     Account getAccountBypnum(String pnum);
+    Account getAccountByuid(int uid);
     //查询账户信息（）
     Account getAccount(int id);
     //注销账户（解绑uid）

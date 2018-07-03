@@ -23,4 +23,6 @@ public interface AccountDao extends BaseDao<Account> {
     @Select("select * from " + tablename + " where phonenumber=#{pnum}")
     Account getAccountByPnum(@Param("pnum") String phonenumber);
 
+    @Select("select * from " + tablename + " where uid=#{uid}")
+    Account getAccountByUid(int uid);
 }

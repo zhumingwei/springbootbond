@@ -18,7 +18,7 @@ open class BaseController {
         response?.let {
             ServletUtil.createResponse(BaseResponse<Any>().apply {
                 code.setCodeMessage(this)
-                this.data = ""
+                this.data = Unit
             }, it)
 
         }

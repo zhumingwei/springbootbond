@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public int updatePassword(Account account) {
         //参数必须有id和password和updateby
-        if (account.getId() == 0 || StringUtil.isEmpty(account.getPassword()) || account.getUpdateby() != 0) {
+        if (account.getId() == 0 || StringUtil.isEmpty(account.getPassword()) || account.getUpdateby() == 0) {
             return 0;
         }
         Account a = accountDao.queryById(account);
@@ -140,6 +140,18 @@ public class UserServiceImpl implements UserService {
         return account;
     }
 
+    @Override
+    @Transactional
+    public Account getAccountByuid(int uid) {
+        Account account = accountDao.getAccountByUid(uid);
+        if (account!=null) {
+            User user = new User();
+            user.setId(account.getUid());
+            user = userDao.queryById(user);
+            account.setUserdetail(user);
+        }
+        return account;
+    }
 
 
     @Transactional

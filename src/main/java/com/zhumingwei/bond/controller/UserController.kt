@@ -33,13 +33,13 @@ class UserController : BaseController() {
     private lateinit var userService: UserService
 
 
-    @RequestMapping(path = [LOGOUT_URL],method = [RequestMethod.POST])
-    fun logout(request: HttpServletRequest, response: HttpServletResponse){
+    @RequestMapping(path = [LOGOUT_URL], method = [RequestMethod.POST])
+    fun logout(request: HttpServletRequest, response: HttpServletResponse) {
         var id = request.getIdFromToken()
-        if (id != 0){
-            responseSuccess(response,"成功")
-        }else{
-            responseSuccess(response,"成功")
+        if (id != 0) {
+            responseSuccess(response, "成功")
+        } else {
+            responseSuccess(response, "成功")
         }
     }
 
@@ -54,6 +54,7 @@ class UserController : BaseController() {
 
         if (!phonenum.isPhoneNum()) {
             responseError(response, ResponseCode.REQUEST_ERROR)
+            return
         }
 
         if (!password.isEmpty()) {
@@ -91,29 +92,31 @@ class UserController : BaseController() {
 
         if (!phonenum.isPhoneNum() || !code.isMsgCode() || password.isEmpty()) {
             responseError(response, ResponseCode.REQUEST_ERROR)
-        }
+        }else
         if (!MessageManager.getRegisterCode(phonenum).equals(code)) {
             responseError(response, ResponseCode.MESSAGE_VALIDATE_ERROR)
-        }
-        MessageManager.deleteRegisterCode(phonenum)
+        }else{
+            MessageManager.deleteRegisterCode(phonenum)
 
-        val account: Account = Account().apply {
-            this.password = EncryptUtil.getSaltMD5(password)
-            this.phonenumber = phonenum
-            this.userdetail = User().apply {
-                nickname = "手机用户" + phonenumber.substring(7)
-                cid = 0
-                is_delete = 0
-                user_level = 0
-                user_state = 0
+            val account: Account = Account().apply {
+                this.password = EncryptUtil.getSaltMD5(password)
+                this.phonenumber = phonenum
+                this.userdetail = User().apply {
+                    nickname = "手机用户" + phonenumber.substring(7)
+                    cid = 0
+                    is_delete = 0
+                    user_level = 0
+                    user_state = 0
+                }
+            }
+            val i = userService.register(account)
+            if (i == 0) {
+                responseError(response, ResponseCode.REGISTER_ERROR)
+            } else {
+                responseSuccess(response, "注册成功");
             }
         }
-        val i = userService.register(account)
-        if (i == 0) {
-            responseError(response, ResponseCode.REGISTER_ERROR)
-        } else {
-            responseSuccess(response, "注册成功");
-        }
+
     }
 
     @RequestMapping(path = [USER_INFO_URL], method = [RequestMethod.POST, RequestMethod.GET])
@@ -166,17 +169,23 @@ class UserController : BaseController() {
         val uid = request.getIdFromToken()
         if (!phonenum.isPhoneNum() || !code.isMsgCode() || password.isEmpty()) {
             responseError(response, ResponseCode.REQUEST_ERROR)
+            return
         }
 
-        if (MessageManager.getChangePwdCode(phonenum) != code) {
+        if (MessageManager.getChangePwdCode(phonenum).isEmpty() || MessageManager.getChangePwdCode(phonenum)!= code) {
             responseError(response, ResponseCode.MESSAGE_VALIDATE_ERROR)
+            return
         }
         MessageManager.deleteChangePwdCode(phonenum)
-        var i = userService.updatePassword(Account().apply {
-            this.uid = uid
-            this.password = password
-            this.updateby = uid.toLong()
-        })
+        var i = 0
+        var account = userService.getAccountByuid(uid)
+        account?.let {
+            i = userService.updatePassword(account.apply {
+                this.uid = uid
+                this.password = password
+                this.updateby = uid.toLong()
+            })
+        }
         if (i != 0) {
             responseSuccess(response, "修改成功")
         } else {
@@ -192,8 +201,9 @@ class UserController : BaseController() {
         val uid = request.getIdFromToken()
         if (!phonenum.isPhoneNum() || code.isEmpty() || password.isEmpty()) {
             responseError(response, ResponseCode.REQUEST_ERROR)
+            return
         }
-        var account:Account? = userService.getAccountByPnumPwd(phonenum,password);
+        var account: Account? = userService.getAccountByPnumPwd(phonenum, password);
         var i = 0
         account?.let {
             i = userService.updatePassword(Account().apply {
