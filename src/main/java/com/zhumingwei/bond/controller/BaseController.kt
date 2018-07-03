@@ -17,7 +17,8 @@ open class BaseController {
     fun responseError(response: HttpServletResponse?, code: ResponseCode) {
         response?.let {
             ServletUtil.createResponse(BaseResponse<Any>().apply {
-                code.setCodeMessage(this);
+                code.setCodeMessage(this)
+                this.data = ""
             }, it)
 
         }
@@ -26,7 +27,7 @@ open class BaseController {
     fun responseSuccess(response: HttpServletResponse?, data: Any) {
         response?.let {
             ServletUtil.createResponse(BaseResponse<Any>().apply {
-                ResponseCode.SUCCESS.setCodeMessage(this);
+                ResponseCode.SUCCESS.setCodeMessage(this)
                 this.data = data
             }, it)
         }

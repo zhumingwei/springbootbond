@@ -71,7 +71,7 @@ class UserController : BaseController() {
             responseSuccess(response, mapOf<String, Any>(
                     "nickname" to account.userdetail.nickname,
                     "token" to token,
-                    "phonenum" to account.phonenumber,
+                    "phonenumber" to account.phonenumber,
                     "uid" to account.uid,
                     "avatar" to account.userdetail.avatar
             ))

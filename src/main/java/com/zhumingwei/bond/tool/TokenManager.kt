@@ -14,7 +14,7 @@ import java.util.*
 object TokenManager {
 
     //过期时间
-    val EX_TIME = (1000 * 60 * 10).toLong()
+    val EX_TIME = (1000 * 60 * 60 * 24).toLong()
     //key 为用户id value Pair<token,Date>为过期时间。
     var tokenStore: ITokenStore = MemoryTokenStore()
     private val SPLIT_STR = "~~~";
@@ -30,7 +30,7 @@ object TokenManager {
 
 
     fun put(uid: Int, tokendate: Pair<String, Date>) {
-        tokenStore.put(uid,tokendate)
+        tokenStore.put(uid, tokendate)
     }
 
     operator fun get(uid: Int): Pair<String, Date>? {

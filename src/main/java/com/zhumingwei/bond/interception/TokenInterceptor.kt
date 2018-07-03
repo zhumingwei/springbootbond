@@ -30,6 +30,7 @@ class TokenInterceptor : HandlerInterceptor {
         } else {
             ServletUtil.createResponse(BaseResponse<Any>().apply {
                 ResponseCode.TOKEN_ERROR.setCodeMessage(this);
+                data = ""
             }, response!!)
         }
         return result

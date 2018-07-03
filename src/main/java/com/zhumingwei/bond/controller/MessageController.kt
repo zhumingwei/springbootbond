@@ -22,43 +22,44 @@ import javax.servlet.http.HttpServletResponse
  */
 @RestController
 @RequestMapping("/msg")
-class MessageController : BaseController(){
-    @RequestMapping("/sendmsg/{type}" , method = [RequestMethod.POST])
-    fun sendMsg(@PathVariable type:String,request:HttpServletRequest,response:HttpServletResponse,@Param("phonenum") phonenum:String){
-        if (!checkPhoneNum(phonenum)){
-            responseError(response,ResponseCode.PHONE_ERROR)
+class MessageController : BaseController() {
+    @RequestMapping("/sendmsg/{type}", method = [RequestMethod.POST])
+    fun sendMsg(@PathVariable type: String, request: HttpServletRequest, response: HttpServletResponse, @Param("phonenum") phonenum: String) {
+        if (!checkPhoneNum(phonenum)) {
+            responseError(response, ResponseCode.PHONE_ERROR)
         }
-        var resp: SendSmsResponse? = when(type){
-            "register"->{
+        var resp: SendSmsResponse? = when (type) {
+            "register" -> {
                 MessageManager.sendRegisterCode(phonenum)
             }
-            "login"->{
+            "login" -> {
                 MessageManager.sendLoginCode(phonenum)
             }
-            "changePwd"->{
+            "changePwd" -> {
                 MessageManager.sendChangePwdCode(phonenum)
             }
             else -> {
                 null
             }
         }
+
         resp?.let {
             responseMessage(response, BaseResponse<String>().apply {
-                if (it.code.toLowerCase() == "ok"){
+                if (it.code.toLowerCase() == "ok") {
                     code = ResponseCode.SUCCESS.code
                     message = ResponseCode.SUCCESS.message + " " + resp.message
-                    data = null
-                }else {
+                    data = "发送验证码成功"
+                } else {
                     code = ResponseCode.SEND_MESSAGE_ERROR.code
                     message = ResponseCode.SEND_MESSAGE_ERROR.message + " " + resp.message
-                    data = null
+                    data = resp.message
                 }
             })
-        }?:run {
+        } ?: run {
             responseMessage(response, BaseResponse<String>().apply {
                 code = ResponseCode.SEND_MESSAGE_ERROR.code
                 message = ResponseCode.SEND_MESSAGE_ERROR.message
-                data = null
+                data = "发送验证码失败"
             })
         }
     }
