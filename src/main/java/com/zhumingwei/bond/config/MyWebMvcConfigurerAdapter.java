@@ -1,6 +1,8 @@
 package com.zhumingwei.bond.config;
 
 import com.zhumingwei.bond.interception.TokenInterceptor;
+import com.zhumingwei.bond.tool.ServletUtil;
+import com.zhumingwei.bond.tool.response.BaseResponse;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.PathMatcher;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

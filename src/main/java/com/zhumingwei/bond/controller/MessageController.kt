@@ -1,10 +1,8 @@
 package com.zhumingwei.bond.controller
 
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse
-import com.zhumingwei.bond.TOKEN_NAME
 import com.zhumingwei.bond.tool.ResponseCode
 import com.zhumingwei.bond.tool.StringUtil.checkPhoneNum
-import com.zhumingwei.bond.tool.TokenManager
 import com.zhumingwei.bond.tool.msm.MessageManager
 import com.zhumingwei.bond.tool.response.BaseResponse
 import org.apache.ibatis.annotations.Param
@@ -44,7 +42,7 @@ class MessageController : BaseController() {
         }
 
         resp?.let {
-            responseMessage(response, BaseResponse<String>().apply {
+            responseMessage(response, BaseResponse<Any>().apply {
                 if (it.code.toLowerCase() == "ok") {
                     code = ResponseCode.SUCCESS.code
                     message = ResponseCode.SUCCESS.message + " " + resp.message
@@ -56,7 +54,7 @@ class MessageController : BaseController() {
                 }
             })
         } ?: run {
-            responseMessage(response, BaseResponse<String>().apply {
+            responseMessage(response, BaseResponse<Any>().apply {
                 code = ResponseCode.SEND_MESSAGE_ERROR.code
                 message = ResponseCode.SEND_MESSAGE_ERROR.message
                 data = "发送验证码失败"

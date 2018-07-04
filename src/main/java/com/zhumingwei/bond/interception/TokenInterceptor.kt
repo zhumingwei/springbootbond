@@ -21,7 +21,7 @@ class TokenInterceptor : HandlerInterceptor {
 
         val token = request.getNotNullHeader(TOKEN_NAME)
         var uid = request.getIdFromToken()
-        if (!token.isEmpty()){
+        if (!token.isEmpty()) {
             result = checkUserExTimeAndTokenRight(uid, token)
         }
 
@@ -30,7 +30,7 @@ class TokenInterceptor : HandlerInterceptor {
         } else {
             ServletUtil.createResponse(BaseResponse<Any>().apply {
                 ResponseCode.TOKEN_ERROR.setCodeMessage(this);
-                data = ""
+                data = Unit
             }, response!!)
         }
         return result

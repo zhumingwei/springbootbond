@@ -3,6 +3,7 @@ package com.zhumingwei.bond.tool
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.serializer.*
 import com.zhumingwei.bond.tool.response.BaseResponse
+import org.omg.CORBA.Object
 
 import javax.servlet.http.HttpServletResponse
 import java.io.IOException
@@ -34,7 +35,10 @@ object ServletUtil {
         })
     }
 
-    fun createResponse(content: BaseResponse<*>, response: HttpServletResponse): String {
+    fun createResponse(content: BaseResponse<Any>, response: HttpServletResponse): String {
+        if (content.data == null || content.equals("")) {
+            content.data = Unit
+        }
         var printWriter: PrintWriter? = null
         var jsonString = ""
         try {

@@ -5,6 +5,9 @@ import com.zhumingwei.bond.dao.base.config.anotation.ID;
 import com.zhumingwei.bond.dao.base.config.anotation.Table;
 import com.zhumingwei.bond.tool.StringUtil;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Table(name = "user")
 public class User extends BaseEntity {
 
@@ -88,4 +91,16 @@ public class User extends BaseEntity {
                 ", is_delete=" + is_delete +
                 "} ";
     }
+
+    public Map<String,Object>  toMap (){
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("id",id);
+        map.put("nickname",nickname);
+        map.put("avatar",avatar);
+        map.put("user_level",user_level);
+        map.put("cid",cid);
+        return map;
+    }
+
+
 }

@@ -2,10 +2,7 @@ package com.zhumingwei.bond.controller
 
 import com.zhumingwei.bond.tool.ResponseCode
 import com.zhumingwei.bond.tool.ServletUtil
-import com.zhumingwei.bond.tool.TokenManager
 import com.zhumingwei.bond.tool.response.BaseResponse
-import java.util.*
-import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 /**
@@ -33,7 +30,7 @@ open class BaseController {
         }
     }
 
-    fun responseMessage(response: HttpServletResponse?, o: BaseResponse<*>) {
+    fun responseMessage(response: HttpServletResponse?, o: BaseResponse<Any>) {
         response?.let { ServletUtil.createResponse(o, it) }
     }
 

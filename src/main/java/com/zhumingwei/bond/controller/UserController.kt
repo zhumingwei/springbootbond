@@ -124,9 +124,12 @@ class UserController : BaseController() {
         val token = request.getHeader(TOKEN_NAME)
         val uid = TokenManager.getIDFromToken(token)
         if (checkUserExTimeAndTokenRight(uid, token)) {
-            val user = userService.queryById(uid)
-            user?.let {
-                responseSuccess(response, user)
+            val usermap = userService.queryById(uid)?.toMap()
+
+            usermap?.let {
+                val phoneNumber = userService.getAccountByuid(uid)?.phonenumber?:""
+                usermap.put("phoneNumber",phoneNumber)
+                responseSuccess(response, usermap)
             } ?: run {
                 responseError(response, ResponseCode.REQUEST_ERROR)
             }
