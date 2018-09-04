@@ -92,30 +92,30 @@ class UserController : BaseController() {
 
         if (!phonenum.isPhoneNum() || !code.isMsgCode() || password.isEmpty()) {
             responseError(response, ResponseCode.REQUEST_ERROR)
-        }else
-        if (!MessageManager.getRegisterCode(phonenum).equals(code)) {
-            responseError(response, ResponseCode.MESSAGE_VALIDATE_ERROR)
-        }else{
-            MessageManager.deleteRegisterCode(phonenum)
+        } else
+            if (!MessageManager.getRegisterCode(phonenum).equals(code)) {
+                responseError(response, ResponseCode.MESSAGE_VALIDATE_ERROR)
+            } else {
+                MessageManager.deleteRegisterCode(phonenum)
 
-            val account: Account = Account().apply {
-                this.password = EncryptUtil.getSaltMD5(password)
-                this.phonenumber = phonenum
-                this.userdetail = User().apply {
-                    nickname = "手机用户" + phonenumber.substring(7)
-                    cid = 0
-                    is_delete = 0
-                    user_level = 0
-                    user_state = 0
+                val account: Account = Account().apply {
+                    this.password = EncryptUtil.getSaltMD5(password)
+                    this.phonenumber = phonenum
+                    this.userdetail = User().apply {
+                        nickname = "手机用户" + phonenumber.substring(7)
+                        cid = 0
+                        is_delete = 0
+                        user_level = 0
+                        user_state = 0
+                    }
+                }
+                val i = userService.register(account)
+                if (i == 0) {
+                    responseError(response, ResponseCode.REGISTER_ERROR)
+                } else {
+                    responseSuccess(response, "注册成功");
                 }
             }
-            val i = userService.register(account)
-            if (i == 0) {
-                responseError(response, ResponseCode.REGISTER_ERROR)
-            } else {
-                responseSuccess(response, "注册成功");
-            }
-        }
 
     }
 
@@ -127,8 +127,8 @@ class UserController : BaseController() {
             val usermap = userService.queryById(uid)?.toMap()
 
             usermap?.let {
-                val phoneNumber = userService.getAccountByuid(uid)?.phonenumber?:""
-                usermap.put("phoneNumber",phoneNumber)
+                val phoneNumber = userService.getAccountByuid(uid)?.phonenumber ?: ""
+                usermap.put("phoneNumber", phoneNumber)
                 responseSuccess(response, usermap)
             } ?: run {
                 responseError(response, ResponseCode.REQUEST_ERROR)
@@ -139,18 +139,24 @@ class UserController : BaseController() {
     }
 
     @RequestMapping(path = [USER_UPDATE], method = [(RequestMethod.POST)])
-    fun updateUser(request: HttpServletRequest, response: HttpServletResponse, @RequestBody user: User) {
+    fun updateUser(request: HttpServletRequest, response: HttpServletResponse, @RequestBody user: Map<String, String>) {
         val uid = request.getIdFromToken()
         val du = userService.queryById(uid)
         var oldavatar: String? = null
-        if (!user.avatar.isEmpty() && user.avatar != du.avatar) {
-            oldavatar = du.avatar
-            du.avatar = user.avatar
+        user["avatar"]?.let {
+            if (!it.isEmpty() && it != du.avatar) {
+                oldavatar = du.avatar
+                du.avatar = it
 
+            }
         }
-        if (!user.nickname.isEmpty()) {
-            du.nickname = user.nickname
+
+        user["nickname"]?.let {
+            if (!it.isEmpty()) {
+                du.nickname = it
+            }
         }
+
         du.updateby = uid.toLong()
         val i = userService.updateUser(du)
         if (i != 0) {
@@ -159,7 +165,7 @@ class UserController : BaseController() {
             responseError(response, ResponseCode.MODIFY_ERROR)
         }
         oldavatar?.let {
-            FileController.delete(oldavatar)
+            FileController.delete(it)
         }
     }
 
@@ -175,7 +181,7 @@ class UserController : BaseController() {
             return
         }
 
-        if (MessageManager.getChangePwdCode(phonenum).isEmpty() || MessageManager.getChangePwdCode(phonenum)!= code) {
+        if (MessageManager.getChangePwdCode(phonenum).isEmpty() || MessageManager.getChangePwdCode(phonenum) != code) {
             responseError(response, ResponseCode.MESSAGE_VALIDATE_ERROR)
             return
         }

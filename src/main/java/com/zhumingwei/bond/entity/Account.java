@@ -2,6 +2,7 @@ package com.zhumingwei.bond.entity;
 
 import com.zhumingwei.bond.dao.base.config.anotation.ID;
 import com.zhumingwei.bond.dao.base.config.anotation.NotColumn;
+import com.zhumingwei.bond.entity.base.BaseEntity;
 
 /**
  * @author zhumingwei

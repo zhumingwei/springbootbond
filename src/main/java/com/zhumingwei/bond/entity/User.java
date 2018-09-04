@@ -3,6 +3,7 @@ package com.zhumingwei.bond.entity;
 import com.zhumingwei.bond.BondConstant;
 import com.zhumingwei.bond.dao.base.config.anotation.ID;
 import com.zhumingwei.bond.dao.base.config.anotation.Table;
+import com.zhumingwei.bond.entity.base.BaseEntity;
 import com.zhumingwei.bond.tool.StringUtil;
 
 import java.util.HashMap;

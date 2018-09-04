@@ -1,4 +1,4 @@
-package com.zhumingwei.bond.entity;
+package com.zhumingwei.bond.entity.base;
 
 import java.util.Date;
 
